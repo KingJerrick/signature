@@ -1,0 +1,4 @@
+\.vscode
+/res/__pycache__
+/slot/__pycache__
+/ui/__pycache__
