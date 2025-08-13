@@ -100,13 +100,13 @@ class ColorPickerWidget(QWidget):
         super().__init__(parent)
 
         # HSV internal (h in [0,360), s/v in [0,1])
-        self.h = 0.0
+        self.h = 224
         self.s = 1.0
         self.v = 1.0
 
         # 比例参数（可调）
         self.ring_ratio = 0.12    # 色环厚度占 side 比例
-        self.square_ratio = 0.58  # 中间正方形边长占 side 比例
+        self.square_ratio = 0.50  # 中间正方形边长占 side 比例
 
         # 缓存：ring image 与其 side
         self._ring_image = None    # QImage or None
