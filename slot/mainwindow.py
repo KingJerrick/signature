@@ -239,7 +239,7 @@ class MainwindowAct(QWidget,ui.ui_mainwindow.Ui_Form):
     def savePicture(self):    
         if self.picture_with_signature:
             filename = os.path.basename(self.path)  # 只取文件名（含扩展名）
-            save_path, _ = QFileDialog.getSaveFileName(self, '保存图片文件', f'S{filename}', 'Images (*.png *.xpm *.jpg *.bmp)')
+            save_path, _ = QFileDialog.getSaveFileName(self, '保存含有签名的图片文件', f'S{filename}', 'Images (*.png *.xpm *.jpg *.bmp)')
             if save_path == "":
                 return
             else:
