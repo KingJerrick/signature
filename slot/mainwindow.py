@@ -236,14 +236,49 @@ class MainwindowAct(QWidget,ui.ui_mainwindow.Ui_Form):
                 pixmap = pixmap.scaled(int(self.label_picture.height()*img_ratio),self.label_picture.height())
             self.label_picture.setPixmap(pixmap)
         
-    def savePicture(self):    
+    def savePicture(self):
         if self.picture_with_signature:
-            filename = os.path.basename(self.path)  # 只取文件名（含扩展名）
-            save_path, _ = QFileDialog.getSaveFileName(self, '保存含有签名的图片文件', f'S{filename}', 'Images (*.png *.xpm *.jpg *.bmp)')
+            filename = os.path.basename(self.path)
+
+            save_path, selected_filter = QFileDialog.getSaveFileName(
+                self,
+                '保存含有签名的图片文件',
+                f'S{filename}.jpg',
+                'JPEG (*.jpg *.jpeg);;PNG (*.png);;BMP (*.bmp);;XPM (*.xpm)'
+            )
             if save_path == "":
                 return
+
+            filter_map = {
+                "JPEG": ("JPEG", ".jpg"),
+                "PNG": ("PNG", ".png"),
+                "BMP": ("BMP", ".bmp"),
+                "XPM": ("XPM", ".xpm"),
+            }
+
+            # 判断用户选的格式
+            for k, (fmt, ext) in filter_map.items():
+                if k in selected_filter:
+                    save_format, ext_name = fmt, ext
+                    break
             else:
-                self.picture_with_signature.save(save_path)
+                save_format, ext_name = "PNG", ".png"  # 默认
+
+            # 补扩展名
+            if not save_path.lower().endswith(ext_name):
+                save_path += ext_name
+
+            # JPEG 不支持 RGBA，需要转为 RGB
+            if save_format == "JPEG" and self.picture_with_signature.mode == "RGBA":
+                img_to_save = self.picture_with_signature.convert("RGB")
+            else:
+                img_to_save = self.picture_with_signature
+
+            # 保存
+            if save_format == "JPEG":
+                img_to_save.save(save_path, save_format, quality=95, subsampling=0)  # 高质量保存
+            else:
+                img_to_save.save(save_path, save_format)
 
 
 
